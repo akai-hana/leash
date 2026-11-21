@@ -24,15 +24,31 @@ static int test()
 }
 
 /**
+ * Change the shell's prompt 
+ */
+static void prompt(char promptText[])
+{
+    char *args = strtok(NULL, "\n");
+
+    if (args) {
+	strcpy(promptText, args);
+	strcat(promptText, " ");
+    }
+}
+
+
+/**
  * Leash shell REPL
  */
 int main(void)
 {
+    char promptText[] = "leash $ ";
+
     char *line = NULL;
     size_t capacity = 0;
 
     for (;;) {
-	printf("leash $ ");
+	printf("%s", promptText);
 	fflush(stdout);
 
 	if (getline(&line, &capacity, stdin) == -1)
@@ -50,6 +66,8 @@ int main(void)
 		test();
 	    else if (strcmp(cmd, "echo") == 0)
 		echo();
+	    else if (strcmp(cmd, "prompt") == 0)
+		prompt(promptText);
 
 	    // fileutils
 	    /*
